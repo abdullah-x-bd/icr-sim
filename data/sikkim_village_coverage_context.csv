@@ -1,0 +1,4 @@
+measure,count,covered_mobile,covered_4g,as_of,source_url,provenance,limitation
+sikkim_all_RGI_villages,461,453,442,2025-06,https://www.pib.gov.in/PressReleasePage.aspx?PRID=2158463&lang=1&reg=3,official_state_summary,village_coverage_not_signal_continuity
+sikkim_identified_border_villages_2024,68,66,66,2024-05,https://sansad.in/getFile/loksabhaquestions/annex/182/AS38_fSPeQO.pdf?source=pqals,official_parliamentary_2024,count_not_individual_TSP_coverage
+sikkim_identified_border_villages_2025,68,68,,2025-07,https://www.sikkimexpress.com/news-details/all-68-identified-border-villages-of-sikkim-under-mobile-coverage,report_on_parliamentary_reply,reported_any_mobile_not_continuous_or_operator_specific
