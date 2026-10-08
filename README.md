@@ -88,5 +88,6 @@ The next development priority is replacing the per-cell capacity approximation w
 - [`index.html`](./index.html) contains the self-contained interactive simulator.
 - [`docs/mathematical-model.md`](./docs/mathematical-model.md) presents the detailed formulation and bibliography.
 - [`docs/findings.md`](./docs/findings.md) records baseline results and their interpretation.
+- [`tests/smoke.cjs`](./tests/smoke.cjs) provides reproducible checks of the model invariants.
 
 **Research direction:** ICR as a standing, capacity-aware connectivity mechanism for selected Indian border and underserved regions.
