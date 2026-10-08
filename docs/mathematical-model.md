@@ -269,3 +269,11 @@ with tower-to-grid radio service and shared-backhaul constraints, plus counterfa
 - Cooperative accounting: net side payments across each active component sum to zero; all cooperative gains are nonnegative after the specified minimum subsidy.
 - Monotonic sanity checks: setting all foreign coverage to zero produces no ICR; no-ICR policy produces no recovered traffic; increasing reserve cannot increase technical capacity; increasing host utilization cannot increase free capacity if all else is held fixed.
 - Relative pricing: changing tariffs must change posted distribution, and must change traffic allocations only in tariff-driven mode.
+
+## 11. Version 1.1 economic calibration
+
+The pricing extension evaluates the existing network allocation with attributable integration costs, a capacity opportunity-cost premium, each guest's best available alternative and a peak/off-peak settlement distinction. It calculates directed bilateral break-even and ceiling tariffs in assumed INR/GB, negotiated surplus-sharing quotations, adjusted operator gains and the viability of cooperative transfers across active sharing components.
+
+Full mathematics, units, calibration status, economic presets and limitations are documented in [Economic calibration and tariff design](./tariff-model.md).
+
+Importantly, **the new pricing inputs do not yet change the optimized traffic allocation**. Joint routing and tariff optimization is a later step.
