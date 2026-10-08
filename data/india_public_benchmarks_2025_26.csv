@@ -1,0 +1,6 @@
+metric,value,unit,period,geography,operator,provenance,source_url,modelling_use,interpretation_limit
+average_monthly_wireless_data_usage,25.51,GB_per_data_subscriber_month,FY2025-26,India,all,published,https://www.pib.gov.in/PressReleseDetailm.aspx?PRID=2319321&lang=1&reg=3,initial_demand_scale,national_mean_not_unserved_roaming_traffic
+average_wireless_data_revenue_realization,8.02,INR_per_GB,FY2025-26,India,all,published,https://www.pib.gov.in/PressReleseDetailm.aspx?PRID=2319321&lang=1&reg=3,retail_revenue_context,not_marginal_cost_or_roaming_price_or_incremental_guest_value
+average_wireless_service_arpu,180.73,INR_per_subscriber_month,FY2025-26,India,all,published,https://www.pib.gov.in/PressReleseDetailm.aspx?PRID=2319321&lang=1&reg=3,revenue_crosscheck,not_contribution_margin_or_value_of_roaming
+wireless_data_traffic_annual,285376,PB_per_year,FY2025-26,India,all,published,https://www.pib.gov.in/PressReleseDetailm.aspx?PRID=2319321&lang=1&reg=3,aggregate_data_volume_crosscheck,national_total_not_border_region_volume
+jio_monthly_per_capita_data_usage,42.3,GB_per_capita_month,Q4FY2025-26,India,Jio,published,https://www.ril.com/ar2025-26/digital-services.html,operator_variation_sensitivity,denominator_and_period_may_differ_from_TRAI_measure
