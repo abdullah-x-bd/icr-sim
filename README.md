@@ -17,6 +17,18 @@ Our starting point is a practical coverage problem. A district can have four mob
 
 The focus is on border and remote regions where persistent connectivity gaps merit analysis beyond disaster-only roaming.
 
+## Priority case study: Sikkim–China border, Nathu La highway
+
+We have made the **Deorali Bazar–Nathu La Pass (NH 310)** corridor our first evidence-grounded border case, using TRAI's May 2026 independent drive test. The published poor-signal sample fractions are **35.02% Airtel, 41.14% BSNL, 19.44% Jio and 47.56% Vi** on the highway test, each with its own sample count. These are not operator-specific no-coverage measurements, and they do not reveal aligned cross-operator coverage overlap.
+
+Our new **[Sikkim economic workbench](./sikkim.html)** combines these observed marginal signal data with the official FY 2025–26 national average of 25.51 GB per wireless data subscriber per month. It leaves subscriber exposure, cross-operator overlap, ability to attach, host capacity, roaming costs and incremental guest value as **explicitly assumed, editable quantities**.
+
+The Sikkim pilot performs a small exact economic search among no ICR, Airtel, Jio and Vi as potential BSNL host networks for peak and off-peak periods. It can decline uneconomic agreements and calculate bilateral cost-recovery and guest-acceptable rate ranges. Because aligned multi-TSP signal observations are absent, it limits each time period to **at most one host**. No quoted rate is presented as an actual Indian wholesale roaming tariff.
+
+See the [Sikkim pilot evidence and methodology](./docs/sikkim-pilot.md) and [TRAI corridor measurements](./data/sikkim_nathula_idt_2026.csv). The underlying model is [sikkim-model.js](./sikkim-model.js), with a self-contained interactive HTML version.
+
+**Research distinction:** Sikkim's administratively counted village mobile coverage is substantial, but this does not establish continuous quality or connectivity along particular mountain roads. We are testing economic conditions for improving route continuity, not asserting that every border village has no service.
+
 ## Run the simulator
 
 Open **[ICR-OPT](./index.html)** in a modern browser. The application runs entirely client-side and works offline, without installation, external services, or API keys.
@@ -98,7 +110,7 @@ The [Version 1.2 execution plan](./docs/implementation-plan-v1.2.md) specifies v
 
 ## Validation
 
-With Node.js installed, run `node tests/smoke.cjs` and `node tests/pricing.cjs` from the repository root. These checks cover the exact 95/90/2 geometry, demand and host-capacity limits, absence of self-roaming, wholesale accounting identities, price sensitivity, no-ICR routing and cooperative clearing balances.
+With Node.js installed, run `node tests/smoke.cjs`, `node tests/pricing.cjs` and `node tests/sikkim.cjs` from the repository root. These checks cover the exact 95/90/2 geometry, demand and host-capacity limits, absence of self-roaming, wholesale accounting identities, price sensitivity, no-ICR routing and cooperative clearing balances.
 
 ## Scope
 
@@ -108,7 +120,10 @@ Our immediate development priority is economic data calibration: incremental hos
 
 ## Repository
 
-- [`index.html`](./index.html) contains the self-contained interactive simulator.
+- [`index.html`](./index.html) contains the original four-TSP grid simulator.
+- [`sikkim.html`](./sikkim.html) contains the self-contained Sikkim-China border economic calibration workbench.
+- [`sikkim-model.js`](./sikkim-model.js) contains its source economic optimization engine.
+- [`docs/sikkim-pilot.md`](./docs/sikkim-pilot.md) records the official Sikkim measurements, assumptions, equations, and next evidence request.
 - [`docs/mathematical-model.md`](./docs/mathematical-model.md) presents the detailed formulation and bibliography.
 - [`docs/findings.md`](./docs/findings.md) records baseline results and their interpretation.
 - [`docs/tariff-model.md`](./docs/tariff-model.md) explains the Version 1.1 pricing mathematics, assumptions and sensitivity cases.
