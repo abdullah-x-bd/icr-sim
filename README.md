@@ -90,6 +90,12 @@ The model combines:
 
 The technical definitions, equations, assumptions, source literature, validation criteria, and extension plan are documented in [Mathematical model and methodology](./docs/mathematical-model.md).
 
+## Next development milestone: ICR-OPT 1.2
+
+The next milestone is **data-calibrated, economically aware agreement selection**. We will retain the existing coverage simulator while improving the units and provenance of demand, host costs and guest benefits. The optimizer will then decide which directed roaming agreements and traffic flows remain privately viable once integration costs, peak-hour opportunity costs and realistic outside options are included.
+
+The [Version 1.2 execution plan](./docs/implementation-plan-v1.2.md) specifies verified Indian public sources, the confidential-data request, parameter schema, mathematical changes and testable acceptance criteria. The [initial Indian telecom benchmark CSV](./data/india_public_benchmarks_2025_26.csv) preserves FY 2025-26 observed usage and revenue benchmarks with their limitations.
+
 ## Validation
 
 With Node.js installed, run `node tests/smoke.cjs` and `node tests/pricing.cjs` from the repository root. These checks cover the exact 95/90/2 geometry, demand and host-capacity limits, absence of self-roaming, wholesale accounting identities, price sensitivity, no-ICR routing and cooperative clearing balances.
@@ -106,6 +112,8 @@ Our immediate development priority is economic data calibration: incremental hos
 - [`docs/mathematical-model.md`](./docs/mathematical-model.md) presents the detailed formulation and bibliography.
 - [`docs/findings.md`](./docs/findings.md) records baseline results and their interpretation.
 - [`docs/tariff-model.md`](./docs/tariff-model.md) explains the Version 1.1 pricing mathematics, assumptions and sensitivity cases.
+- [`docs/implementation-plan-v1.2.md`](./docs/implementation-plan-v1.2.md) specifies the economic data acquisition and next optimization milestone.
+- [`data/india_public_benchmarks_2025_26.csv`](./data/india_public_benchmarks_2025_26.csv) records sourced FY 2025-26 public market benchmarks.
 - [`tests/smoke.cjs`](./tests/smoke.cjs) provides reproducible checks of the original model invariants.
 - [`tests/pricing.cjs`](./tests/pricing.cjs) checks rate bounds, accounting, alternative values, economic sensitivity and cooperative clearing.
 
