@@ -116,3 +116,9 @@ The key limitation is the independent grid-cell capacity assumption. Real towers
 We will prioritize a **shared-site/sector capacity model**, measured busy-hour traffic, realistic attachment eligibility, and costed build-versus-roam counterfactuals. Only then can the tool support quantitative recommendations for identified border districts or actual operator agreements.
 
 See [the model specification](./mathematical-model.md) for definitions, constraints and the literature foundation.
+
+## Version 1.1 tariff sensitivity findings
+
+The economic extension preserves the same synthetic geographical and traffic allocation while changing only the assumptions used to price it. In the sparse-border base case, daily private surplus is approximately INR 400,405 and all 24 active directed-pair period quotations have nonempty break-even intervals. Under peak scarcity, the same allocation yields roughly INR 125,340 of private surplus but six of 24 bilateral period quotations become infeasible. Higher fixed costs produce roughly INR 145,405 with 11 infeasible quotes. Strong guest alternatives produce a private shortfall of approximately INR 198,014 and no feasible bilateral period quote.
+
+These results demonstrate that **positive total gains need not imply a commercially viable per-unit rate for each direction**. The detailed equations, price bounds and sensitivities appear in [the Version 1.1 tariff model](./tariff-model.md). All monetary figures remain synthetic.
