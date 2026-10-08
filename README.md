@@ -6,6 +6,14 @@ This repository develops a framework for examining whether permanent, capacity-a
 
 Our starting point is a practical coverage problem. A district can have four mobile operators with different network footprints, yet subscribers still lose service wherever their home network is absent. Rather than treating each network independently, we study how their existing infrastructure can be coordinated, when roaming should be admitted, and which commercial arrangements could make cooperation sustainable.
 
+## Joint agreement optimization and coalition-stable settlements
+
+Our [joint optimization research model](./research/joint_optimizer.py) simultaneously selects directed ICR agreements and allocates traffic using a mixed-integer program. It then recomputes the optimal sharing surplus for every possible subgroup of four operators and tests whether a proposed division of gains would motivate any subgroup to exit.
+
+The [coalition-stability laboratory](./joint-settlements.html) lets us explore 24 solved synthetic network games in a browser, compare equal division with bilateral bargaining and core-constrained settlement, and adjust operator gains to test stability. The precomputed, core-constrained invoices include attributable fixed enablement fees and cost-reflective peak/off-peak usage rates. Browser changes to gains are diagnostics, not fresh network optimizations.
+
+A 200-case synthetic benchmark found **12/200** equal divisions stable, **105/200** bilateral 50/50 allocations stable and **200/200** core-constrained allocations feasible under the model's explicit bilateral cost-floor and value-ceiling bounds. This **does not** establish a universal existence theorem or measured operator benefits. The complete equations, experiment assumptions, sensitivity results and limitations are in the [joint optimization research note](./docs/joint-optimization.md).
+
 ## ICR charging and multilateral settlement research
 
 The [charging and settlement design study](./docs/settlement-design.md) separates cost accounting, contract charging basis and inter-operator clearing. It develops incremental-cost bounds, two-part and capacity-based contract options, bilateral bargaining, reciprocal netting and coalition-stable multilateral payoffs.
@@ -118,7 +126,7 @@ The [Version 1.2 execution plan](./docs/implementation-plan-v1.2.md) specifies v
 
 ## Validation
 
-With Node.js installed, run `node tests/smoke.cjs`, `node tests/pricing.cjs`, `node tests/sikkim.cjs` and `node tests/settlement.cjs` from the repository root. These checks cover the exact 95/90/2 geometry, demand and host-capacity limits, absence of self-roaming, wholesale accounting identities, price sensitivity, no-ICR routing and cooperative clearing balances.
+With Node.js installed, run `node tests/smoke.cjs`, `node tests/pricing.cjs`, `node tests/sikkim.cjs`, `node tests/settlement.cjs`, and `python -m unittest discover -s tests -p 'test_*.py' -v` from the repository root. These checks cover the exact 95/90/2 geometry, demand and host-capacity limits, absence of self-roaming, wholesale accounting identities, price sensitivity, no-ICR routing and cooperative clearing balances.
 
 ## Scope
 
@@ -137,6 +145,9 @@ Our immediate development priority is economic data calibration: incremental hos
 - [`docs/tariff-model.md`](./docs/tariff-model.md) explains the Version 1.1 pricing mathematics, assumptions and sensitivity cases.
 - [`docs/settlement-design.md`](./docs/settlement-design.md) develops bilateral, reciprocal and multilateral charging and settlement criteria.
 - [`models/settlement.js`](./models/settlement.js) implements a fixed-flow four-operator settlement comparator.
+- [`joint-settlements.html`](./joint-settlements.html) is an interactive core-stability laboratory.
+- [`research/joint_optimizer.py`](./research/joint_optimizer.py) jointly optimizes agreements, traffic and implementable coalition settlements.
+- [`docs/joint-optimization.md`](./docs/joint-optimization.md) documents methods, results and limitations.
 - [`docs/implementation-plan-v1.2.md`](./docs/implementation-plan-v1.2.md) specifies the economic data acquisition and next optimization milestone.
 - [`data/india_public_benchmarks_2025_26.csv`](./data/india_public_benchmarks_2025_26.csv) records sourced FY 2025-26 public market benchmarks.
 - [`tests/smoke.cjs`](./tests/smoke.cjs) provides reproducible checks of the original model invariants.
