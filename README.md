@@ -25,6 +25,23 @@ Select a preset, change the assumptions, and run the model. The app provides an 
 
 The interface supports four allocation modes: no roaming, maximum private efficiency, public-interest efficiency, and posted-price admission.
 
+## Economic calibration and tariff pricing (Version 1.1)
+
+The **Economics & settlements** tab includes an editable pricing calculator for every active directed guest-host link.
+
+We calculate separately for peak and off-peak periods:
+
+- The host's minimum economically viable rate, including operating cost, scarcity/opportunity cost and attributable fixed integration cost.
+- The guest's maximum viable rate, after accounting for the value of its next-best available alternative and attributable fixed costs.
+- An illustrative negotiated rate within the feasible interval, using an adjustable host share of bilateral surplus.
+- Adjusted daily gains for each operator, whether every bilateral quote is feasible, and the feasibility of pooled multilateral transfers.
+
+The sensitivity buttons provide four **synthetic** calibration starting points: baseline assumptions, peak scarcity, fixed-cost pressure and strong alternatives. You can edit the assumptions for each operator and adjust the assumed GB equivalent represented by one simulator traffic unit.
+
+The current calculator evaluates the **already assigned traffic** from the original optimization engine. Changing its new economic parameters changes the rate evaluation, not the radio allocation or traffic quantities. This intentionally separates initial tariff discovery from the next stage of jointly optimizing routing, contract choices and prices.
+
+For formulas, scope and calibrated input requirements, read [Economic calibration and tariff design](./docs/tariff-model.md).
+
 ## Preset cases
 
 | Case | Starting question |
@@ -75,19 +92,21 @@ The technical definitions, equations, assumptions, source literature, validation
 
 ## Validation
 
-With Node.js installed, run `node tests/smoke.cjs` from the repository root. These checks cover the exact 95/90/2 geometry, demand and host-capacity limits, absence of self-roaming, wholesale accounting identities, price sensitivity, no-ICR routing and cooperative clearing balances.
+With Node.js installed, run `node tests/smoke.cjs` and `node tests/pricing.cjs` from the repository root. These checks cover the exact 95/90/2 geometry, demand and host-capacity limits, absence of self-roaming, wholesale accounting identities, price sensitivity, no-ICR routing and cooperative clearing balances.
 
 ## Scope
 
-Version 1 is a **research and policy-planning prototype**. All coverage grids, traffic loads, unit valuations, operator shares, and wholesale tariffs are synthetic and editable. The model uses independent capacity pools per grid cell. A deployment model will need real site- and sector-level constraints, interference and signal data, common backhaul limitations, service-specific QoS, and actual operator traffic measurements.
+Version 1.1 is a **research and policy-planning prototype**. All coverage grids, traffic loads, unit valuations, operator shares, and wholesale tariffs are synthetic and editable. The model uses independent capacity pools per grid cell. A deployment model will need real site- and sector-level constraints, interference and signal data, common backhaul limitations, service-specific QoS, and actual operator traffic measurements.
 
-The next development priority is replacing the per-cell capacity approximation with a sector-level network resource model, then comparing commercial ICR against targeted new towers and upgrades under a multi-year cost framework.
+Our immediate development priority is economic data calibration: incremental host traffic costs, busy-hour opportunity costs, realistic roaming volumes, fixed agreement costs and defensible guest benefits. After these are grounded, we can jointly re-optimize traffic allocations and contract pricing. Sector-level network engineering and infrastructure investment comparison are subsequent extensions.
 
 ## Repository
 
 - [`index.html`](./index.html) contains the self-contained interactive simulator.
 - [`docs/mathematical-model.md`](./docs/mathematical-model.md) presents the detailed formulation and bibliography.
 - [`docs/findings.md`](./docs/findings.md) records baseline results and their interpretation.
-- [`tests/smoke.cjs`](./tests/smoke.cjs) provides reproducible checks of the model invariants.
+- [`docs/tariff-model.md`](./docs/tariff-model.md) explains the Version 1.1 pricing mathematics, assumptions and sensitivity cases.
+- [`tests/smoke.cjs`](./tests/smoke.cjs) provides reproducible checks of the original model invariants.
+- [`tests/pricing.cjs`](./tests/pricing.cjs) checks rate bounds, accounting, alternative values, economic sensitivity and cooperative clearing.
 
 **Research direction:** ICR as a standing, capacity-aware connectivity mechanism for selected Indian border and underserved regions.
