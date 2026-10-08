@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ICR-OPT | Sikkim Nathu La Economic Workbench</title>
+<style>
+:root{color-scheme:dark;--bg:#0c101b;--panel:#161d2e;--line:#2c3850;--text:#eef3ff;--soft:#aab9d0;--blue:#6ca2ff;--green:#78d6b0;--red:#f4a3aa}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,Arial,sans-serif;line-height:1.5}
+main{max-width:1170px;margin:auto;padding:29px 22px 90px}
+header{padding:12px 0 22px}h1{font-size:32px;letter-spacing:-.8px;margin:0 0 8px}h2{font-size:20px;margin:0 0 12px}h3{font-size:16px;margin:0 0 8px}p{margin:7px 0 14px}
+small,.muted{color:var(--soft)}.lede{max-width:880px;color:var(--soft)}
+a{color:#a3c7ff}.tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--green);border:1px solid #386e63;padding:4px 9px;border-radius:30px;margin-bottom:15px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:15px}.panels{display:grid;grid-template-columns:minmax(330px, .9fr) minmax(410px,1.3fr);gap:16px;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:19px;margin:0 0 16px}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}
+.metric{background:var(--panel);border:1px solid var(--line);padding:16px;border-radius:11px}.metric strong{display:block;font-size:23px;margin-top:5px;letter-spacing:-.5px}.metric span{display:block;font-size:12px;color:var(--soft)}
+label{display:block;font-size:12px;font-weight:600;color:var(--soft)}input,select{display:block;margin:5px 0 14px;width:100%;background:#0d1525;border:1px solid #40516d;color:var(--text);padding:9px 10px;border-radius:7px;font:inherit;font-size:14px}
+select{cursor:pointer}input:focus,select:focus{outline:2px solid #477bb9}
+button{border:1px solid #466382;color:var(--text);background:#1c2a42;padding:8px 11px;border-radius:7px;cursor:pointer;font:inherit;font-size:13px}button:hover{background:#293d5b}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 12px}
+.tablewrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:12px}th,td{padding:9px 9px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}td:first-child,th:first-child{text-align:left}th{color:var(--soft);font-weight:600}td.pass{color:var(--green)}td.fail{color:var(--red)}
+.hbar{width:100%;height:9px;background:#29384f;border-radius:10px;margin:5px 0 10px;overflow:hidden}.hbar>div{height:100%;background:#86aef3;border-radius:10px}
+.operators{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.operators .segment{background:#0d1525;border:1px solid var(--line);border-radius:9px;padding:11px}
+.segment h3{margin-bottom:10px}.note{padding:12px 14px;background:#1e2a3c;border:1px solid #485c78;border-radius:9px;font-size:13px;color:#d9e5f5}
+.good{color:var(--green)}.bad{color:var(--red)}
+.controls-head{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.barTitle{display:flex;justify-content:space-between;gap:8px;font-size:13px}
+button.primary{background:#315998;border-color:#315998}
+footer{font-size:12px;color:var(--soft);margin-top:20px}
+@media(max-width:860px){.panels,.two{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.operators{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}h1{font-size:26px}}
+</style></head>
+<body><main>
+<header><div class="tag">ICR-OPT / Evidence-grounded pilot / v1.2</div>
+<h1>Sikkim border corridor: economic workbench</h1>
+<p class="lede">Study focus: Deorali Bazar to Nathu La Pass on NH 310. Published TRAI measurements establish individual network signal-quality margins. Subscriber exposure, paired coverage overlap, capacity, costs, and contract terms remain adjustable scenario inputs. All resulting tariffs are <strong>conditional research estimates</strong>, not observed market prices.</p>
+<div class="row"><a href="./index.html">← Original four-operator simulator</a><a href="./docs/sikkim-pilot.md">Study methods and source notes</a><button id="export" type="button">Export current run (JSON)</button></div>
+</header>
+<section class="panel">
+<h2>Published TRAI corridor evidence</h2>
+<p class="muted" style="font-size:13px">May 2026, highway drive (66.5 km). Poor-signal sampling in automatic network-selection mode, during voice tests. The values are <strong>not</strong> measured no-coverage rates or paired operator observations.</p>
+<div class="two"><div id="bars"></div><div class="tablewrap"><table><thead><tr><th>Operator</th><th>Samples</th><th>Poor</th><th>Download Mbps</th></tr></thead><tbody id="observedRows"></tbody></table></div></div>
+<p style="font-size:12px" class="muted">Source: <a href="https://www.pib.gov.in/PressReleasePage.aspx?PRID=2280639&lang=1&reg=3" target="_blank" rel="noopener">TRAI / PIB, 3 July 2026</a>, with operator tables in the <a href="https://static.pib.gov.in/WriteReadData/specificdocs/documents/2026/jul/doc202673910301.pdf" target="_blank" rel="noopener">published annexure</a>. The original tested corridor is part of the Sikkim border region and does not measure all of North Sikkim.</p>
+</section>
+<div class="panels">
+<div>
+<section class="panel">
+<div class="controls-head"><h2>Scenario assumptions</h2><div class="row"><button class="primary" data-preset="central" type="button">Central</button><button data-preset="conservative" type="button">Conservative</button><button data-preset="optimistic" type="button">Optimistic</button></div></div>
+<label>Cross-operator signal overlap (unmeasured)</label><select id="dependence"><option value="lower">Minimum plausible overlap</option><option value="independent">Independent signal margins (scenario)</option><option value="upper">Maximum plausible overlap</option></select>
+<div class="formgrid">
+<label>BSNL subscriber-days on study corridor<input id="exposedSubscriberDays" type="number" min="0" step="100"></label>
+<label>Average GB/subscriber/month<input id="monthlyGB" type="number" min="0" step=".1"></label>
+<label>Share of daily usage in corridor<input id="corridorUsageShare" type="number" min="0" max="1" step=".05"></label>
+<label>Weak-signal traffic actually recoverable<input id="weakToUnusable" type="number" min="0" max="1" step=".05"></label>
+<label>Successful roaming attach share<input id="attachSuccess" type="number" min="0" max="1" step=".05"></label>
+<label>Peak share of candidate traffic<input id="peakDemandShare" type="number" min="0" max="1" step=".05"></label>
+<label>BSNL incremental benefit ₹/GB<input id="guestValue" type="number" min="0" step=".05"></label>
+<label>BSNL best alternative value ₹/GB<input id="guestOutsideValue" type="number" min="0" step=".05"></label>
+<label>Host share of bilateral surplus<input id="hostShare" type="number" min="0" max="1" step=".05"></label>
+</div>
+<div class="note"><strong>Input provenance:</strong> 25.51 GB/month comes from TRAI's FY 2025–26 national aggregate. The subscriber-days, weak-service recovery, operator costs and incremental guest benefit below are illustrative assumptions.</div>
+</section>
+<section class="panel"><h2>Host economics, ₹ and GB per daypart</h2><div id="hostControls" class="operators"></div><p class="muted" style="font-size:12px">Fixed host and guest costs are charged once per activated directed agreement, per representative day. Capacity represents assumed spare roaming GB, not measured Nathu La sector capacity.</p></section>
+</div>
+<div>
+<div class="metrics" id="metrics"></div>
+<section class="panel"><h2>Chosen agreements and quoted wholesale rates</h2><div class="note" id="verdict"></div><div class="tablewrap" style="margin-top:12px"><table><thead><tr><th>Time</th><th>Host</th><th>Carried GB</th><th>Min ₹/GB</th><th>Max ₹/GB</th><th>Quote ₹/GB</th></tr></thead><tbody id="flows"></tbody></table></div><p class="muted" style="font-size:12px">Each daypart can use one host, or none. The solver compares 16 choices including no agreement, accounts for fixed costs, and declines individually infeasible contracts. This first-pass model does not combine multiple hosts within the same daypart because joint site-by-site coverage was not measured.</p></section>
+<section class="panel"><h2>Win-win accounting</h2><div class="tablewrap"><table><thead><tr><th>Participant</th><th>Incremental daily gain</th></tr></thead><tbody id="gains"></tbody></table></div><div class="note" style="margin-top:10px">Wholesale payments are transfers. The sum of guest and host gains must equal total incremental private surplus after actual hosting and fixed costs.</div></section>
+<section class="panel"><h2>What can the other operators cover?</h2><div id="eligibility"></div><p class="muted" style="font-size:12px">The displayed shares are mathematical scenarios for the proportion of BSNL's poor-signal samples potentially coinciding with another TSP's acceptable-signal samples, assuming a common sampling frame. The TRAI report does not contain aligned cross-operator measurements, so these are <strong>not observed complementarity percentages</strong>.</p></section>
+<section class="panel"><h2>Compare plausible economic environments</h2><div class="tablewrap"><table><thead><tr><th>Assumptions</th><th>Potential GB</th><th>Carried GB</th><th>Selected</th><th>Private surplus ₹</th></tr></thead><tbody id="comparison"></tbody></table></div></section>
+</div>
+</div>
+<footer><strong>Methodological boundary:</strong> This is a corridor-level policy economics demonstrator, not a network-control implementation. Replacing scenario estimates requires paired spatial observations, anonymized guest traffic, safe host capacity bands, and empirically supported incremental costs.</footer>
+</main><script>
+(function(root){
+"use strict";
+const OBSERVED={
+ route:"Deorali Bazar to Nathu La Pass, NH 310",
+ date:"8-9 May 2026",length_km:66.5,
+ source:"https://www.pib.gov.in/PressReleasePage.aspx?PRID=2280639&lang=1&reg=3",
+ operators:{
+  Airtel:{poor:4584,total:13089,dl:41.60,ul:7.51},
+  BSNL:{poor:6087,total:14797,dl:6.68,ul:3.34},
+  Jio:{poor:1711,total:8802,dl:60.26,ul:7.50},
+  Vi:{poor:3597,total:7563,dl:13.79,ul:4.86}
+ }
+};
+function defaults(){
+ return {
+  guest:"BSNL",monthlyGB:25.51,exposedSubscriberDays:3000,
+  corridorUsageShare:0.45,weakToUnusable:0.75,attachSuccess:0.85,
+  peakDemandShare:0.35,guestValue:5.25,guestOutsideValue:0.60,
+  hostShare:0.50,dependence:"independent",pricePrecision:2,
+  hosts:{
+   Airtel:{cost:2.0,offScarcity:0.30,peakScarcity:1.0,offCapacity:300,peakCapacity:130,hostFixed:180,guestFixed:70},
+   Jio:{cost:1.6,offScarcity:0.30,peakScarcity:2.0,offCapacity:360,peakCapacity:110,hostFixed:220,guestFixed:80},
+   Vi:{cost:2.6,offScarcity:0.20,peakScarcity:0.80,offCapacity:220,peakCapacity:80,hostFixed:130,guestFixed:70}
+  }
+ };
+}
+const finite=(v,def=0)=>{const n=Number(v);return Number.isFinite(n)?n:def};
+function clamp(x,lo,hi){return Math.max(lo,Math.min(hi,x))}
+function conditionalEligibility(home,host,model){
+ const a=home.poor/home.total,b=host.poor/host.total;
+ const joint=model==="lower"?Math.max(0,a-b):
+             model==="upper"?Math.min(a,1-b):a*(1-b);
+ return a>0?clamp(joint/a,0,1):0;
+}
+function normalized(cfg){
+ const c=Object.assign(defaults(),cfg||{});
+ c.hosts=Object.assign({},defaults().hosts,cfg&&cfg.hosts||{});
+ for(const j of Object.keys(defaults().hosts))c.hosts[j]=Object.assign({},defaults().hosts[j],c.hosts[j]||{});
+ c.peakDemandShare=clamp(finite(c.peakDemandShare,.35),0,1);
+ c.corridorUsageShare=clamp(finite(c.corridorUsageShare,.45),0,1);
+ c.weakToUnusable=clamp(finite(c.weakToUnusable,.75),0,1);
+ c.attachSuccess=clamp(finite(c.attachSuccess,.85),0,1);
+ c.hostShare=clamp(finite(c.hostShare,.5),0,1);
+ c.exposedSubscriberDays=Math.max(0,finite(c.exposedSubscriberDays,0));
+ c.monthlyGB=Math.max(0,finite(c.monthlyGB,0));
+ c.guestValue=finite(c.guestValue,0);
+ c.guestOutsideValue=finite(c.guestOutsideValue,0);
+ if(!OBSERVED.operators[c.guest])throw Error("Unknown guest");
+ if(!["lower","independent","upper"].includes(c.dependence))throw Error("Bad overlap scenario");
+ for(const j of Object.keys(c.hosts)){
+  const h=c.hosts[j];
+  for(const k of ["cost","offScarcity","peakScarcity","offCapacity","peakCapacity","hostFixed","guestFixed"]){
+   h[k]=Math.max(0,finite(h[k],0));
+  }
+ }
+ return c;
+}
+function evaluate(input){
+ const c=normalized(input),home=OBSERVED.operators[c.guest],bad=home.poor/home.total,hosts=Object.keys(c.hosts).filter(j=>j!==c.guest);
+ const baseGB=c.exposedSubscriberDays*c.monthlyGB/30*c.corridorUsageShare*bad*c.weakToUnusable;
+ const demand={off:baseGB*(1-c.peakDemandShare),peak:baseGB*c.peakDemandShare};
+ const eligible=Object.fromEntries(hosts.map(j=>[j,conditionalEligibility(home,OBSERVED.operators[j],c.dependence)*c.attachSuccess]));
+ const choices=[null,...hosts];let candidates=[],best=null;
+ for(const off of choices)for(const peak of choices){
+  let pairVolumes={},flows=[],variableSurplus=0;
+  for(const period of ["off","peak"]){
+   const j=period==="off"?off:peak;if(!j)continue;
+   const h=c.hosts[j],capacity=h[period+"Capacity"];
+   const q=Math.max(0,Math.min(capacity,demand[period]*eligible[j]));
+   if(q<=1e-10)continue;
+   const unitHostCost=h.cost+h[period==="off"?"offScarcity":"peakScarcity"];
+   pairVolumes[j]=(pairVolumes[j]||0)+q;
+   flows.push({period,host:j,gb:q,hostUnitCost:unitHostCost});
+   variableSurplus+=q*(c.guestValue-c.guestOutsideValue-unitHostCost);
+  }
+  let agreementFixedCost=0;
+  for(const j of Object.keys(pairVolumes))agreementFixedCost+=c.hosts[j].hostFixed+c.hosts[j].guestFixed;
+  const pricing=flows.map(flow=>{
+   const h=c.hosts[flow.host],q=flow.gb,pairQ=pairVolumes[flow.host];
+   const floor=flow.hostUnitCost+h.hostFixed/pairQ;
+   const ceiling=c.guestValue-c.guestOutsideValue-h.guestFixed/pairQ;
+   const feasible=floor<=ceiling+1e-9;
+   const tariff=feasible?floor+c.hostShare*(ceiling-floor):null;
+   const hostGain=feasible?q*(tariff-flow.hostUnitCost)-h.hostFixed*q/pairQ:null;
+   const guestGain=feasible?q*(c.guestValue-c.guestOutsideValue-tariff)-h.guestFixed*q/pairQ:null;
+   return Object.assign({},flow,{floor,ceiling,tariff,feasible,hostGain,guestGain});
+  });
+  const priceFeasible=pricing.every(p=>p.feasible);
+  const surplus=variableSurplus-agreementFixedCost;
+  const valid=priceFeasible&&surplus>=-1e-8;
+  const result={off:off||"none",peak:peak||"none",flows:pricing,agreementFixedCost,surplus,valid,
+   carriedGB:flows.reduce((s,x)=>s+x.gb,0),
+   guestGain:pricing.reduce((s,p)=>s+(p.guestGain||0),0),
+   hostGains:Object.fromEntries(hosts.map(j=>[j,pricing.filter(p=>p.host===j).reduce((s,p)=>s+(p.hostGain||0),0)]))};
+  candidates.push(result);
+  if(valid&&(!best||surplus>best.surplus+1e-9))best=result;
+ }
+ // The all-zero agreement is always available.
+ const selected=best||candidates.find(q=>q.off==="none"&&q.peak==="none");
+ const bounds=Object.fromEntries(hosts.map(j=>[j,conditionalEligibility(home,OBSERVED.operators[j],c.dependence)]));
+ const potential=hosts.map(j=>{
+  const fraction=bounds[j],h=c.hosts[j],totalDemand=demand.off+demand.peak;
+  return {host:j,conditionalShare:fraction,effectiveEligibility:eligible[j],
+    theoreticalGB:totalDemand*fraction,eligibleGB:totalDemand*eligible[j],
+    variableCostOff:h.cost+h.offScarcity,variableCostPeak:h.cost+h.peakScarcity};
+ });
+ const expectedCost=selected.flows.reduce((s,p)=>s+p.gb*p.hostUnitCost,0);
+ return {inputs:c,observed:OBSERVED,weakShare:bad,baseCandidateGB:baseGB,periodDemandGB:demand,
+  eligibleFractions:bounds,potential,selected,totalCost:expectedCost+selected.agreementFixedCost,
+  avoidedOrRecoveredGB:selected.carriedGB,
+  maxPossibleGB:baseGB,
+  fractionRecovered:baseGB>0?selected.carriedGB/baseGB:0,
+  allCandidates:candidates,validCandidates:candidates.filter(x=>x.valid).length,
+  accountingResidual:Math.abs(selected.surplus-selected.guestGain-Object.values(selected.hostGains).reduce((a,b)=>a+b,0)),
+  inputStatuses:{
+   operatorSignal:"OBSERVED_MARGINAL_TRAI",
+   benchmarkUsage:"PUBLISHED_NATIONAL_TRAI",
+   trafficExposed:"SCENARIO_ASSUMPTION",
+   physicalOverlap:"UNOBSERVED_SCENARIO_BOUNDS",
+   networkAvailability:"SCENARIO_ASSUMPTION",
+   hostCostsAndBenefits:"SCENARIO_ASSUMPTION"
+  }};
+}
+function scenarios(){
+ const b=defaults();
+ const low=JSON.parse(JSON.stringify(b));low.exposedSubscriberDays=900;low.guestValue=3.0;low.weakToUnusable=.5;low.dependence="lower";
+ for(const h of Object.values(low.hosts)){h.cost*=1.4;h.peakScarcity*=1.7;h.offScarcity*=1.4;}
+ const high=JSON.parse(JSON.stringify(b));high.exposedSubscriberDays=6500;high.guestValue=7.0;high.dependence="upper";high.weakToUnusable=.9;
+ for(const h of Object.values(high.hosts)){h.cost*=.8;h.peakScarcity*=.7;h.offScarcity*=.7;}
+ return {conservative:low,central:b,optimistic:high};
+}
+const api={OBSERVED,defaults,normalized,conditionalEligibility,evaluate,scenarios};
+if(typeof module!=="undefined"&&module.exports)module.exports=api;
+root.ICR_SIKKIM=api;
+})(typeof globalThis!=="undefined"?globalThis:this);
+
+
+const E=window.ICR_SIKKIM;let scenario=E.defaults(),last=null;
+const q=id=>document.getElementById(id),round=(n,d=2)=>Number(n).toLocaleString('en-IN',{maximumFractionDigits:d,minimumFractionDigits:d});
+function drawObserved(){
+ const ops=E.OBSERVED.operators;
+ q("bars").innerHTML=Object.entries(ops).map(([k,o])=>{
+  const pct=100*o.poor/o.total;
+  return '<div class="barTitle"><strong>'+k+'</strong><span>'+round(pct,1)+'% poor signal</span></div><div class="hbar"><div style="width:'+pct+'%"></div></div>';
+ }).join('');
+ q("observedRows").innerHTML=Object.entries(ops).map(([k,o])=>
+  '<tr><td>'+k+'</td><td>'+round(o.total,0)+'</td><td>'+round(o.poor,0)+'</td><td>'+round(o.dl,2)+'</td></tr>').join('');
+}
+function renderInputs(){
+ for(const k of ["exposedSubscriberDays","monthlyGB","corridorUsageShare","weakToUnusable","attachSuccess","peakDemandShare","guestValue","guestOutsideValue","hostShare"])q(k).value=scenario[k];
+ q("dependence").value=scenario.dependence;
+ q("hostControls").innerHTML=Object.entries(scenario.hosts).map(([name,h])=>{
+  const fields=[["cost","Incremental cost ₹/GB"],["offScarcity","Off-peak scarcity ₹/GB"],["peakScarcity","Peak scarcity ₹/GB"],
+   ["offCapacity","Off-peak spare GB"],["peakCapacity","Peak spare GB"],["hostFixed","Host fixed ₹/day"],["guestFixed","Guest fixed ₹/day"]];
+  return '<div class="segment"><h3>'+name+'</h3>'+fields.map(([key,label])=>'<label>'+label+'<input data-host="'+name+'" data-field="'+key+'" type="number" min="0" step=".1" value="'+h[key]+'"></label>').join('')+'</div>';
+ }).join('');
+ document.querySelectorAll("[data-host]").forEach(el=>el.addEventListener("change",()=>{scenario.hosts[el.dataset.host][el.dataset.field]=Math.max(0,Number(el.value)||0);run();}));
+}
+function run(){
+ try{last=E.evaluate(scenario)}catch(e){q("verdict").textContent=e.message;return;}
+ const r=last,s=r.selected,periods=s.flows;
+ q("metrics").innerHTML=[
+  ["Candidate at-risk GB",round(r.baseCandidateGB,0),"assumption-driven"],
+  ["Carried via ICR",round(s.carriedGB,0)+" GB","capacity and economic constraints"],
+  ["Net private surplus", "₹"+round(s.surplus,0),"guest plus hosts"],
+  ["Active agreements",new Set(periods.map(f=>f.host)).size,"selected by optimizer"]
+ ].map(([label,value,detail])=>'<div class="metric"><span>'+label+'</span><strong>'+value+'</strong><span>'+detail+'</span></div>').join('');
+ q("verdict").innerHTML=s.carriedGB?'<span class="good"><strong>Selected: '+s.off+' off-peak; '+s.peak+' peak.</strong></span> The model activates only jointly viable tariff periods after accounting for contract setup costs.':'<span class="bad"><strong>No privately viable agreement under these assumptions.</strong></span> The optimized no-ICR alternative avoids a loss.';
+ q("flows").innerHTML=periods.length?periods.map(f=>'<tr><td>'+f.period+'</td><td>'+f.host+'</td><td>'+round(f.gb,1)+'</td><td>'+round(f.floor,2)+'</td><td>'+round(f.ceiling,2)+'</td><td class="pass">'+round(f.tariff,2)+'</td></tr>').join(''):'<tr><td colspan="6">No selected flows</td></tr>';
+ const gains=[["BSNL guest",s.guestGain],...Object.entries(s.hostGains).map(([j,v])=>[j+" host",v])];
+ q("gains").innerHTML=gains.map(([k,v])=>'<tr><td>'+k+'</td><td class="'+(v>=0?'pass':'fail')+'">₹'+round(v,2)+'</td></tr>').join('')+'<tr><td><strong>Total</strong></td><td><strong>₹'+round(s.surplus,2)+'</strong></td></tr>';
+ q("eligibility").innerHTML=r.potential.map(p=>'<div class="barTitle"><strong>'+p.host+'</strong><span>'+round(p.conditionalShare*100,1)+'% of weak-signal route samples (scenario)</span></div><div class="hbar"><div style="width:'+p.conditionalShare*100+'%"></div></div>').join('');
+ q("comparison").innerHTML=Object.entries(E.scenarios()).map(([name,params])=>{
+  const z=E.evaluate(params);return '<tr><td>'+name+'</td><td>'+round(z.baseCandidateGB,0)+'</td><td>'+round(z.selected.carriedGB,0)+'</td><td>'+z.selected.off+' / '+z.selected.peak+'</td><td>'+round(z.selected.surplus,0)+'</td></tr>';
+ }).join('');
+}
+document.querySelectorAll("[data-preset]").forEach(el=>el.addEventListener("click",()=>{scenario=E.scenarios()[el.dataset.preset];renderInputs();run();}));
+for(const key of ["exposedSubscriberDays","monthlyGB","corridorUsageShare","weakToUnusable","attachSuccess","peakDemandShare","guestValue","guestOutsideValue","hostShare"]){
+ q(key).addEventListener("change",()=>{scenario[key]=Math.max(0,Number(q(key).value)||0);run();});
+}
+q("dependence").addEventListener("change",()=>{scenario.dependence=q("dependence").value;run();});
+q("export").addEventListener("click",()=>{
+ const data=JSON.stringify({case:"NH310 Sikkim China-border corridor",source:E.OBSERVED.source,observed:E.OBSERVED.operators,results:last},null,2);
+ const blob=new Blob([data],{type:"application/json"}),a=document.createElement('a'),url=URL.createObjectURL(blob);
+ a.href=url;a.download="icr-sikkim-current-scenario.json";a.click();URL.revokeObjectURL(url);
+});
+drawObserved();renderInputs();run();
+
+</script></body></html>
