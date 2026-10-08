@@ -277,7 +277,7 @@ def run_game(seed):
     ideal=unconstrained_core(values)
     contracted=implementable_settlement(base,values,False)
     credit=implementable_settlement(base,values,True)
-    capped=implementable_settlement(base,values,False,True)
+    capped=implementable_settlement(base,values,pairwise_bounds=True)
     return dict(seed=seed, grand_value=base['welfare'], active_agreements=base['active'],
       total_traffic=float(base['volumes'].sum()), coalition_values=values,
       base_gains=base['base_gains'], equal_gains=equal,
