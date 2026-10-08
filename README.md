@@ -6,6 +6,14 @@ This repository develops a framework for examining whether permanent, capacity-a
 
 Our starting point is a practical coverage problem. A district can have four mobile operators with different network footprints, yet subscribers still lose service wherever their home network is absent. Rather than treating each network independently, we study how their existing infrastructure can be coordinated, when roaming should be admitted, and which commercial arrangements could make cooperation sustainable.
 
+## ICR charging and multilateral settlement research
+
+The [charging and settlement design study](./docs/settlement-design.md) separates cost accounting, contract charging basis and inter-operator clearing. It develops incremental-cost bounds, two-part and capacity-based contract options, bilateral bargaining, reciprocal netting and coalition-stable multilateral payoffs.
+
+The methodology includes a synthetic four-operator mixed-integer simulation of 420 network instances, coalition-value recomputation in 24 cases, and 100,000 one-pair stochastic contract stresses. These experiments are **illustrative**, not estimates of actual ICR tariff outcomes. A companion [fixed-flow four-operator settlement model](./models/settlement.js) implements transparent accounting, price corridors and coalition checks, with [tests](./tests/settlement.cjs).
+
+The primary economic policy question is whether an incremental-cost-based charge with transparent fixed costs, measured resource usage and justified peak capacity compensation can give all operators a positive incremental gain, while leaving no subgroup with a stronger standalone alternative.
+
 ## Research questions
 
 - Where does one operator cover the gaps in another operator's network?
@@ -110,7 +118,7 @@ The [Version 1.2 execution plan](./docs/implementation-plan-v1.2.md) specifies v
 
 ## Validation
 
-With Node.js installed, run `node tests/smoke.cjs`, `node tests/pricing.cjs` and `node tests/sikkim.cjs` from the repository root. These checks cover the exact 95/90/2 geometry, demand and host-capacity limits, absence of self-roaming, wholesale accounting identities, price sensitivity, no-ICR routing and cooperative clearing balances.
+With Node.js installed, run `node tests/smoke.cjs`, `node tests/pricing.cjs`, `node tests/sikkim.cjs` and `node tests/settlement.cjs` from the repository root. These checks cover the exact 95/90/2 geometry, demand and host-capacity limits, absence of self-roaming, wholesale accounting identities, price sensitivity, no-ICR routing and cooperative clearing balances.
 
 ## Scope
 
@@ -127,6 +135,8 @@ Our immediate development priority is economic data calibration: incremental hos
 - [`docs/mathematical-model.md`](./docs/mathematical-model.md) presents the detailed formulation and bibliography.
 - [`docs/findings.md`](./docs/findings.md) records baseline results and their interpretation.
 - [`docs/tariff-model.md`](./docs/tariff-model.md) explains the Version 1.1 pricing mathematics, assumptions and sensitivity cases.
+- [`docs/settlement-design.md`](./docs/settlement-design.md) develops bilateral, reciprocal and multilateral charging and settlement criteria.
+- [`models/settlement.js`](./models/settlement.js) implements a fixed-flow four-operator settlement comparator.
 - [`docs/implementation-plan-v1.2.md`](./docs/implementation-plan-v1.2.md) specifies the economic data acquisition and next optimization milestone.
 - [`data/india_public_benchmarks_2025_26.csv`](./data/india_public_benchmarks_2025_26.csv) records sourced FY 2025-26 public market benchmarks.
 - [`tests/smoke.cjs`](./tests/smoke.cjs) provides reproducible checks of the original model invariants.
