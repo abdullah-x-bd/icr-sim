@@ -1,5 +1,15 @@
 # ICR-OPT 1.2: Evidence Acquisition and Economic Optimization Plan
 
+## Sikkim-first implementation completed (8 October 2026)
+
+The initial empirically anchored study is now the **Deorali Bazar–Nathu La Pass highway on the Sikkim–China border**. We have loaded TRAI's May 2026 operator-specific signal-quality measurements and official FY 2025–26 national subscriber-usage benchmark. The pilot uses observed marginal data together with explicitly labelled scenarios for cross-operator overlap, daily subscriber exposure, actual recovery of weak-signal traffic, available spare host capacity and commercial economics.
+
+The [standalone workbench](../sikkim.html), [case methodology](./sikkim-pilot.md), [data acquisition specification](./sikkim-data-acquisition.md) and [Sikkim validation tests](../tests/sikkim.cjs) are available. The pilot has an exact small-scale contract selection model for BSNL as guest with one host per daypart. It is deliberately **not** presented as the final general four-operator MILP described later in this plan.
+
+Before making empirical tariff claims, the outstanding requirements are aligned multi-operator coverage observations, actual candidate roaming GB, safely usable host capacity, incremental host cost and guest economic values. The next calibration decision is whether these can be obtained from TRAI, DBN or participating TSPs as aggregated statistics.
+
+
+
 **Prepared 8 October 2026**
 
 ## Objective
