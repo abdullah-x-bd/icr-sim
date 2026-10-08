@@ -73,6 +73,10 @@ The model combines:
 
 The technical definitions, equations, assumptions, source literature, validation criteria, and extension plan are documented in [Mathematical model and methodology](./docs/mathematical-model.md).
 
+## Validation
+
+With Node.js installed, run `node tests/smoke.cjs` from the repository root. These checks cover the exact 95/90/2 geometry, demand and host-capacity limits, absence of self-roaming, wholesale accounting identities, price sensitivity, no-ICR routing and cooperative clearing balances.
+
 ## Scope
 
 Version 1 is a **research and policy-planning prototype**. All coverage grids, traffic loads, unit valuations, operator shares, and wholesale tariffs are synthetic and editable. The model uses independent capacity pools per grid cell. A deployment model will need real site- and sector-level constraints, interference and signal data, common backhaul limitations, service-specific QoS, and actual operator traffic measurements.
