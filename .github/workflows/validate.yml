@@ -1,0 +1,27 @@
+name: Validate ICR-OPT
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: research/requirements.txt
+      - name: Install scientific dependencies
+        run: python -m pip install -r research/requirements.txt
+      - name: Run JS settlement regression tests
+        run: |
+          node tests/smoke.cjs
+          node tests/pricing.cjs
+          node tests/sikkim.cjs
+          node tests/settlement.cjs
+      - name: Run joint MILP and coalition settlement tests
+        run: python -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Reproduce small sample
+        run: python research/joint_optimizer.py --seeds 24 --output /tmp/icr_joint_24.json
