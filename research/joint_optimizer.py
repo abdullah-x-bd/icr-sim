@@ -56,7 +56,7 @@ def optimize(data, coalition=tuple(range(N))):
     pair_list = sorted(edges)
     F, P = len(flow), len(pair_list)
     empty = dict(welfare=0., volumes=np.zeros((N, N, T)), pair_host_cost=np.zeros((N, N)),
-                 base_gains=np.zeros(N), guest_values=np.zeros(N),
+                 period_host_cost=np.zeros((N, N, T)), base_gains=np.zeros(N), guest_values=np.zeros(N),
                  host_costs=np.zeros(N), fixed=np.zeros((N, N)), active=[])
     if not F:
         return empty
@@ -94,7 +94,7 @@ def optimize(data, coalition=tuple(range(N))):
                     options=dict(time_limit=25, mip_rel_gap=1e-9))
     if solution.status != 0 or solution.x is None:
         raise RuntimeError(f'MILP not certified optimal: status={solution.status}: {solution.message}')
-    volumes=np.zeros((N,N,T)); pair_cost=np.zeros((N,N))
+    volumes=np.zeros((N,N,T)); pair_cost=np.zeros((N,N));period_cost=np.zeros((N,N,T))
     guest=np.zeros(N); host=np.zeros(N)
     for qty, (z,t,i,j,l,cost) in zip(solution.x[:F],flow):
         if qty < 1e-8:
@@ -103,6 +103,7 @@ def optimize(data, coalition=tuple(range(N))):
         guest[i] += qty * data['benefit'][i]
         host[j] += qty * cost
         pair_cost[i,j] += qty * cost
+        period_cost[i,j,t] += qty * cost
     fixed = np.zeros((N,N)); active=[]
     for i,j in pair_list:
         if volumes[i,j,:].sum()>1e-7:
@@ -112,7 +113,7 @@ def optimize(data, coalition=tuple(range(N))):
     welfare=float(baseline.sum())
     if abs(welfare+solution.fun)>1e-4:
         raise AssertionError('Internal objective/accounting mismatch')
-    return dict(welfare=welfare, volumes=volumes, pair_host_cost=pair_cost,
+    return dict(welfare=welfare, volumes=volumes, pair_host_cost=pair_cost, period_host_cost=period_cost,
                 base_gains=baseline, guest_values=guest, host_costs=host,
                 fixed=fixed, active=active)
 
@@ -241,6 +242,32 @@ def implementable_settlement(base, values, permit_reverse=False, pairwise_bounds
                 largest_violation=max([x['gap'] for x in gaps],default=0.))
 
 
+def two_part_terms(base, settlement):
+    """Represent total invoices using an enablement fee and two usage rates.
+
+    A fixed enablement fee recovers 60% of the host's agreement setup cost.
+    Each period rate covers its host incremental cost and a constant per-GB
+    allocation of the remaining jointly negotiated margin.
+    """
+    result=[]
+    for (i,j),payment in settlement['payments'].items():
+        volumes=base['volumes'][i,j,:]
+        costs=base['period_host_cost'][i,j,:]
+        total=float(volumes.sum())
+        if total<=1e-10:continue
+        enablement=float(.6*base['fixed'][i,j])
+        margin=float(payment-costs.sum()-enablement)
+        rates=[(float(cost/q+margin/total) if q>1e-10 else None)
+               for q,cost in zip(volumes,costs)]
+        reconstructed=enablement+sum(q*r for q,r in zip(volumes,rates) if r is not None)
+        if abs(reconstructed-payment)>1e-5:raise AssertionError('Tariff breakdown mismatch')
+        result.append(dict(guest=NAMES[i],host=NAMES[j],
+            activation_fee=enablement,offpeak_rate=rates[0],peak_rate=rates[1],
+            offpeak_volume=float(volumes[0]),peak_volume=float(volumes[1]),
+            full_payment=float(payment),margin_over_host_cost=margin))
+    return result
+
+
 def run_game(seed):
     data=instance(seed)
     base=optimize(data)
@@ -257,7 +284,9 @@ def run_game(seed):
       equal_blocked=core_violation(equal,values), bilateral_gains=bilateral,
       bilateral_blocked=core_violation(bilateral,values), ideal_core=ideal,
       directional=contracted, signed_credit=credit, capped_bilateral=capped,
+      two_part_tariffs=two_part_terms(base,capped) if capped['core_stable'] else [],
       pair_volumes=base['volumes'], pair_costs=base['pair_host_cost'],
+      pair_period_costs=base['period_host_cost'],
       contract_fixed=base['fixed'])
 
 
