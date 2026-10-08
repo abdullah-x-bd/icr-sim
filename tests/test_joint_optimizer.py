@@ -36,6 +36,15 @@ class JointICRTests(unittest.TestCase):
                 self.assertAlmostEqual(sum(settlement['gains']),g['grand_value'],places=5)
                 self.assertTrue(all(x>=-1e-6 for x in settlement['gains']))
             self.assertTrue(g['ideal_core']['feasible'])
+            for terms in g['two_part_tariffs']:
+                total=terms['activation_fee']
+                for period in ['offpeak','peak']:
+                    rate=terms[period+'_rate']
+                    if rate is not None:
+                        total+=rate*terms[period+'_volume']
+                self.assertAlmostEqual(total,terms['full_payment'],places=5)
+                self.assertGreaterEqual(terms['margin_over_host_cost'],-1e-5)
+
 
     def test_empty_core_is_not_silently_approved(self):
         # Three-player simple majority, with T4 a dummy. Any two of
